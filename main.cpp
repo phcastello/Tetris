@@ -155,7 +155,7 @@ int main() {
         return -1;
     }
     music.setLoop(true);     // Repete a música
-    music.setVolume(30);     // Volume de 0 a 100
+    music.setVolume(15);     // Volume de 0 a 100
     music.play();
 
     sf::Color colors[] = {
