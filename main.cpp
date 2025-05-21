@@ -33,6 +33,14 @@ bool check() {
     return true;
 }
 
+bool check(Point p[4]) {
+    for (int i = 0; i < 4; i++) {
+        if (p[i].x < 0 || p[i].x >= fieldWidth || p[i].y >= fieldHeight) return false;
+        else if (field[p[i].y][p[i].x]) return false;
+    }
+    return true;
+}
+
 bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop) {
     sf::Font font;
     if (!font.loadFromFile("HennyPenny-Regular.ttf")) {
@@ -346,6 +354,21 @@ int main() {
             default: break; // 0 linhas limpas -> nada muda
         }
 
+        Point ghost[4];
+        for (int i = 0; i < 4; ++i)
+            ghost[i] = a[i]; // copia as posições da peça atual
+
+        while (true) {
+            for (int i = 0; i < 4; ++i)
+                ghost[i].y += 1;
+
+            if (!check(ghost)) {
+                for (int i = 0; i < 4; ++i)
+                    ghost[i].y -= 1;
+                break;
+            }
+        }
+
         // draw
         window.clear(sf::Color::Black);
 
@@ -392,6 +415,14 @@ int main() {
                 block.setFillColor(colors[field[i][j]]);
                 window.draw(block);
             }
+        }
+
+        sf::Color ghostColor = colors[colorNum];
+        ghostColor.a = 100;
+        for (int i = 0; i < 4; i++) {
+            block.setFillColor(ghostColor);
+            block.setPosition(offsetX + ghost[i].x * blockSize + 1, offsetY + ghost[i].y * blockSize + 1);
+            window.draw(block);
         }
 
         // peça atual
