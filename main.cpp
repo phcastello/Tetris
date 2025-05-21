@@ -195,12 +195,6 @@ int main() {
         a[i].y = figures[n][i] / 2;
     }
 
-    std::cout << "width: " << desktop.width << "\n";
-    std::cout << "height: " << desktop.height << "\n";
-
-    std::cout << "width - 100: " << desktop.width - 100 << "\n";
-    std::cout << "height - 100: " << desktop.height - 100 << "\n";
-
     while(window.isOpen()){
         time = clock.getElapsedTime().asSeconds();
         clock.restart();
@@ -224,8 +218,7 @@ int main() {
                     moveTimer = 0;
                 }
             }
-
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::C && !holdUsed) {
+            if(e.type == sf::Event::KeyPressed and e.key.code == sf::Keyboard::C and !holdUsed) {
                 if (holdPiece == -1) {
                     holdPiece = n;
                     n = nextPieces.dequeue();
@@ -238,6 +231,16 @@ int main() {
                 setPiece(n, a, figures);
                 holdUsed = true;
             }
+            if(e.type == sf::Event::KeyPressed and e.key.code == sf::Keyboard::Space){
+                while (true) {
+                    for (int i = 0; i < 4; i++) b[i] = a[i]; // salva estado atual
+                    for (int i = 0; i < 4; i++) a[i].y += 1; // tenta descer 1
+                    if (!check()) { // se colidiu
+                        for (int i = 0; i < 4; i++) a[i] = b[i]; // volta 1 passo
+                        break;
+                    }
+                }
+            }  
             
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
