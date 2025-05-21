@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <time.h>
 #include "DataStructLib.hpp"
 
@@ -147,6 +148,15 @@ int main() {
     if (!showMenu(window, desktop)) {
         return 0; // jogador saiu no menu
     }
+
+    sf::Music music;
+    if (!music.openFromFile("Tetris.ogg")) {
+        std::cerr << "Erro ao carregar a música\n";
+        return -1;
+    }
+    music.setLoop(true);     // Repete a música
+    music.setVolume(30);     // Volume de 0 a 100
+    music.play();
 
     sf::Color colors[] = {
         sf::Color(0, 0, 0),       // 0 - vazio
