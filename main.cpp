@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
-#include "../libs/DataStructLib.hpp"
+#include "DataStructLib.hpp"
 
 const int fieldWidth = 10;
 const int fieldHeight = 20;
@@ -127,6 +127,8 @@ int main() {
         std::cerr << "Fonte não encontrada.";
         return false;
     }
+    float moveTimer = 0;
+    float moveDelay = 0.1f;
 
     // Tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -201,6 +203,7 @@ int main() {
         time = clock.getElapsedTime().asSeconds();
         clock.restart();
         timer += time;
+        moveTimer += time;
 
         sf::Event e;
         while (window.pollEvent(e)) {
@@ -210,9 +213,16 @@ int main() {
 
             if (e.type == sf::Event::KeyPressed) {
                 if (e.key.code == sf::Keyboard::Up) rotate = true;
-                else if (e.key.code == sf::Keyboard::Left) dx = -1;
-                else if (e.key.code == sf::Keyboard::Right) dx = 1;
+                else if (e.key.code == sf::Keyboard::Left) {
+                    dx = -1;
+                    moveTimer = 0; // reseta o timer pra permitir repetição mais natural
+                }
+                else if (e.key.code == sf::Keyboard::Right) {
+                    dx = 1;
+                    moveTimer = 0;
+                }
             }
+
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::C && !holdUsed) {
                 if (holdPiece == -1) {
                     holdPiece = n;
@@ -228,6 +238,19 @@ int main() {
             }
             
         }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (moveTimer > moveDelay) {
+                dx = -1;
+                moveTimer = 0;
+            }
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (moveTimer > moveDelay) {
+                dx = 1;
+                moveTimer = 0;
+            }
+        }
+
 
         // move horizontal
         for (int i = 0; i < 4; i++){
