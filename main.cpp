@@ -23,6 +23,8 @@ struct Point{
     int x, y;
 } a[4], b[4];
 
+int offsetSpawnFig = (fieldWidth / 2) - 1;
+
 bool check() {
     for (int i = 0; i < 4; i++) {
         if (a[i].x < 0 || a[i].x >= fieldWidth || a[i].y >= fieldHeight) return false;
@@ -115,7 +117,7 @@ bool showMenu(sf::RenderWindow& window, const sf::VideoMode& desktop) {
 
 void setPiece(int pieceIndex, Point a[4], int figures[7][4]) {
     for (int i = 0; i < 4; ++i) {
-        a[i].x = figures[pieceIndex][i] % 2;
+        a[i].x = (figures[pieceIndex][i] % 2) + offsetSpawnFig;
         a[i].y = figures[pieceIndex][i] / 2;
     }
 }
@@ -189,7 +191,7 @@ int main() {
 
     float time;
     for (int i = 0; i < 4; i++) {
-        a[i].x = figures[n][i] % 2;
+        a[i].x = figures[n][i] % 2 + offsetSpawnFig;
         a[i].y = figures[n][i] / 2;
     }
 
@@ -300,7 +302,7 @@ int main() {
 
                 // Atualiza a peça atual "a" com os novos pontos
                 for (int i = 0; i < 4; i++) {
-                    a[i].x = figures[n][i] % 2;
+                    a[i].x = figures[n][i] % 2 + offsetSpawnFig;
                     a[i].y = figures[n][i] / 2;
                 }
                 
