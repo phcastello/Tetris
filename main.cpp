@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <time.h>
+#include <random>
 #include "DataStructLib.hpp"
 
 const int fieldWidth = 10;
@@ -26,6 +26,14 @@ struct Point{
 
 int offsetSpawnFig = (fieldWidth / 2) - 1;
 
+std::random_device rd;
+std::mt19937 gen(rd());
+
+int random(int min, int max){
+    std::uniform_int_distribution<> dist(min,max);
+    return dist(gen);
+}
+
 bool check() {
     for (int i = 0; i < 4; i++) {
         if (a[i].x < 0 || a[i].x >= fieldWidth || a[i].y >= fieldHeight) return false;
@@ -42,7 +50,7 @@ bool check(Point p[4]) {
     return true;
 }
 
-bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop) {
+bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop, int score) {
     sf::Font font;
     if (!font.loadFromFile("HennyPenny-Regular.ttf")) {
         return false;
@@ -51,6 +59,10 @@ bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop) {
     sf::Text gameOverText("GAME OVER", font, 80);
     gameOverText.setFillColor(sf::Color::Red);
     gameOverText.setPosition(desktop.width / 2.f - gameOverText.getGlobalBounds().width / 2, desktop.height * 0.3f);
+
+    sf::Text scoreText("Seu Score: " + std::to_string(score), font, 50);
+    scoreText.setFillColor(sf::Color::Yellow);
+    scoreText.setPosition(desktop.width/2.f - scoreText.getGlobalBounds().width/2, desktop.height * 0.4f);
 
     sf::Text restartText("Pressione ENTER para Reiniciar", font, 40);
     restartText.setFillColor(sf::Color::White);
@@ -75,6 +87,7 @@ bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop) {
 
         window.clear(sf::Color::Black);
         window.draw(gameOverText);
+        window.draw(scoreText);
         window.draw(restartText);
         window.draw(exitText);
         window.display();
@@ -132,7 +145,6 @@ void setPiece(int pieceIndex, Point a[4], int figures[7][4]) {
 }
 
 int main() {
-    srand(time(0));
     sf::Font font;
     if (!font.loadFromFile("HennyPenny-Regular.ttf")){
         std::cerr << "Fonte não encontrada.";
@@ -168,14 +180,13 @@ int main() {
         sf::Color(128, 0, 128),   // 6 - roxo (J)
         sf::Color(0, 255, 255)    // 7 - ciano (O)
     };
-
     Queue<int> nextPieces;
     int holdPiece = -1;       // -1 significa nenhum hold ainda
     bool holdUsed = false;    // impede múltiplos holds por peça
     const int queueSize = 4;  // quantas peças mantemos na fila
 
     for (int i = 0; i < queueSize; ++i) {
-        nextPieces.enqueue(rand() % 7);
+        nextPieces.enqueue(random(0, 6));
     }
 
     int score = 0;
@@ -319,7 +330,7 @@ int main() {
                 colorNum = n + 1;
 
                 // Enfileira uma nova peça aleatória para manter a fila cheia
-                nextPieces.enqueue(rand() % 7);
+                nextPieces.enqueue(random(0,6));
 
                 // Atualiza a peça atual "a" com os novos pontos
                 for (int i = 0; i < 4; i++) {
@@ -330,7 +341,7 @@ int main() {
             }
 
             if (!check()) {
-                showGameOver(window, desktop);
+                showGameOver(window, desktop, score);
                 return 0;
             }
 
