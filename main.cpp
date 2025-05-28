@@ -5,6 +5,7 @@
 
 const int fieldWidth = 10;
 const int fieldHeight = 20;
+int score = 0;
 
 // campo de jogo
 int field[fieldHeight][fieldWidth] = {0};
@@ -50,7 +51,7 @@ bool check(Point p[4]) {
     return true;
 }
 
-bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop, int score) {
+bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop){
     sf::Font font;
     if (!font.loadFromFile("HennyPenny-Regular.ttf")) {
         return false;
@@ -60,7 +61,7 @@ bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop, int sc
     gameOverText.setFillColor(sf::Color::Red);
     gameOverText.setPosition(desktop.width / 2.f - gameOverText.getGlobalBounds().width / 2, desktop.height * 0.3f);
 
-    sf::Text scoreText("Seu Score: " + std::to_string(score), font, 50);
+    sf::Text scoreText("Seu Score: " + std::to_string(score), font, 70);
     scoreText.setFillColor(sf::Color::Yellow);
     scoreText.setPosition(desktop.width/2.f - scoreText.getGlobalBounds().width/2, desktop.height * 0.4f);
 
@@ -96,7 +97,7 @@ bool showGameOver(sf::RenderWindow& window, const sf::VideoMode& desktop, int sc
     return false;
 }
 
-bool showMenu(sf::RenderWindow& window, const sf::VideoMode& desktop) {
+bool showMenu(sf::RenderWindow& window, const sf::VideoMode& desktop){
     sf::Font font;
     if (!font.loadFromFile("HennyPenny-Regular.ttf")) {
         return false;
@@ -188,8 +189,6 @@ int main() {
     for (int i = 0; i < queueSize; ++i) {
         nextPieces.enqueue(random(0, 6));
     }
-
-    int score = 0;
 
     float marginPercent = 0.10f; // 10% de margem vertical
     int usableHeight = desktop.height * (1.0f - marginPercent);
@@ -340,11 +339,11 @@ int main() {
                 
             }
 
-            if (!check()) {
-                showGameOver(window, desktop, score);
+            if (!check()){
+                music.stop();
+                showGameOver(window, desktop);
                 return 0;
             }
-
             timer = 0;
         }
 
