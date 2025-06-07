@@ -1,4 +1,5 @@
-#include <iostream> // Biblioteca padrão para entrada e saída (cin, cout)
+#pragma once
+#include <iostream>
 
 // ========================
 // Classe Node (Nó da Lista)
