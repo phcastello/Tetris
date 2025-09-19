@@ -1,4 +1,4 @@
-# Tetris OO
+# Tetris
 
 Implementação em C++17 do clássico Tetris utilizando [SFML](https://www.sfml-dev.org/). O projeto foi refatorado para uma arquitetura modular, cobrindo menu, jogo completo em tela cheia e telas de fim de jogo, além de funcionalidades modernas como *ghost piece*, *hold*, *hard drop* e pré-visualização de peças.
 
