@@ -61,7 +61,7 @@ private:
     Score score_{};
     GameState state_ = GameState::Menu;
     float dropTimer_ = 0.0f;
-    std::size_t queueSize_ = 4;
+    std::size_t queueSize_ = static_cast<std::size_t>(config::queuePreviewCount);
 };
 
 } // namespace tetris

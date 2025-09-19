@@ -1,5 +1,6 @@
 #include "../include/tetris/Game.hpp"
 
+#include <algorithm>
 #include <utility>
 
 namespace tetris {
@@ -27,6 +28,7 @@ void Game::reset() {
         nextPieces_.pop();
     }
 
+    bag_.resetHistory();
     bag_.refill(nextPieces_, queueSize_);
     active_ = ActivePiece{};
     state_ = GameState::Menu;
@@ -45,6 +47,10 @@ void Game::update(float dt, bool softDrop) {
 
     dropTimer_ += dt;
     const float delay = softDrop ? config::fastDropDelay : config::normalDropDelay;
+
+    if (softDrop) {
+        dropTimer_ = std::min(dropTimer_, delay);
+    }
 
     while (dropTimer_ >= delay) {
         dropTimer_ -= delay;
@@ -101,6 +107,7 @@ void Game::hold() {
         active_.rotation = 0;
         active_.origin = spawnOrigin();
         dropTimer_ = 0.0f;
+        bag_.registerUse(active_.id);
         if (!canPlace(active_.id, active_.rotation, active_.origin)) {
             state_ = GameState::GameOver;
         }
@@ -183,6 +190,7 @@ void Game::spawnFromQueue() {
     active_.origin = spawnOrigin();
     dropTimer_ = 0.0f;
     holdUsed_ = false;
+    bag_.registerUse(active_.id);
 
     if (!canPlace(active_.id, active_.rotation, active_.origin)) {
         state_ = GameState::GameOver;

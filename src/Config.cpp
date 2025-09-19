@@ -24,7 +24,8 @@ Layout makeLayout(const sf::VideoMode& desktop) {
     layout.holdBoxY = 50;
 
     layout.queueBoxWidth = layout.blockSize * 5;
-    layout.queueBoxHeight = layout.blockSize * 12;
+    const int queueMarginBlocks = 2;
+    layout.queueBoxHeight = layout.blockSize * (config::queuePreviewCount * 4 + queueMarginBlocks);
     layout.queueBoxX = static_cast<int>(desktop.width - layout.queueBoxWidth - 50);
     layout.queueBoxY = 50;
 

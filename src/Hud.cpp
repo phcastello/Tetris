@@ -50,6 +50,14 @@ bool Hud::showMenu(sf::RenderWindow& window, const config::Layout& layout) {
             layout.desktop.height * 0.6f);
         window.draw(exit);
 
+        sf::Text signature("Criadores: Pedro Hasson Castello, Ruan Pablo Martins, Patrick Correa", font_, 28);
+        signature.setFillColor(sf::Color(180, 180, 180));
+        const auto signatureBounds = signature.getLocalBounds();
+        signature.setPosition(
+            layout.desktop.width / 2.0f - signatureBounds.width / 2.0f,
+            layout.desktop.height * 0.8f);
+        window.draw(signature);
+
         window.display();
     }
 
@@ -107,6 +115,14 @@ bool Hud::showGameOver(sf::RenderWindow& window, const config::Layout& layout, i
             layout.desktop.width / 2.0f - exitBounds.width / 2.0f,
             layout.desktop.height * 0.6f);
         window.draw(exit);
+
+        sf::Text signature("Criadores: Pedro Hasson Castello, Ruan Pablo Martins, Patrick Correa", font_, 28);
+        signature.setFillColor(sf::Color(180, 180, 180));
+        const auto signatureBounds = signature.getLocalBounds();
+        signature.setPosition(
+            layout.desktop.width / 2.0f - signatureBounds.width / 2.0f,
+            layout.desktop.height * 0.82f);
+        window.draw(signature);
 
         window.display();
     }

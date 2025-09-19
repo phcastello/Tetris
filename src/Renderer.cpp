@@ -139,17 +139,27 @@ void Renderer::drawHold(sf::RenderWindow& window, const Game& game, const sf::Fo
 void Renderer::drawQueue(sf::RenderWindow& window, const Game& game, const sf::Font& font) {
     window.draw(queueArea_);
 
-    const auto preview = game.queuePreview(4);
-    const float pieceHeight = static_cast<float>(layout_.blockSize * 3);
+    const auto preview = game.queuePreview(config::queuePreviewCount);
+    if (!preview.empty()) {
+        const float slotHeight = queueArea_.getSize().y / static_cast<float>(preview.size());
+        const float horizontalPadding = static_cast<float>(layout_.blockSize) * 0.5f;
+        const float verticalPadding = static_cast<float>(layout_.blockSize) * 0.25f;
 
-    for (std::size_t index = 0; index < preview.size(); ++index) {
-        drawPreviewPiece(
-            window,
-            preview[index],
-            queueArea_.getPosition().x,
-            queueArea_.getPosition().y + static_cast<float>(index) * pieceHeight,
-            queueArea_.getSize().x,
-            pieceHeight);
+        for (std::size_t index = 0; index < preview.size(); ++index) {
+            const float slotTop = queueArea_.getPosition().y + static_cast<float>(index) * slotHeight;
+            const float slotWidth = queueArea_.getSize().x - 2.0f * horizontalPadding;
+            const float slotInnerHeight = std::max(
+                slotHeight - 2.0f * verticalPadding,
+                static_cast<float>(layout_.blockSize));
+
+            drawPreviewPiece(
+                window,
+                preview[index],
+                queueArea_.getPosition().x + horizontalPadding,
+                slotTop + verticalPadding,
+                slotWidth,
+                slotInnerHeight);
+        }
     }
 
     sf::Text label;
