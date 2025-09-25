@@ -28,60 +28,80 @@ Implementação em C++17 do clássico Tetris utilizando [SFML](https://www.sfml-
 
 ## Estrutura do projeto
 ```
+├── CMakeLists.txt
 ├── LICENSE
 ├── README.md
-├── Tetris.cpp
+├── apps
+│   ├── tetris_cli.cpp
+│   └── tetris_gui.cpp
 ├── assets
 │   ├── HennyPenny.ttf
 │   └── TetrisGameMusic.ogg
-├── bin
-│   ├── HennyPenny.ttf
-│   ├── OpenAL32.dll
-│   ├── Tetris.exe
-│   ├── TetrisGameMusic.ogg
-│   ├── Tetris_LINUX
-│   ├── Tetris_WINDOWS.exe
-│   ├── assets
-│   │   ├── HennyPenny.ttf
-│   │   └── TetrisGameMusic.ogg
-│   ├── libFLAC-12.dll
-│   ├── libbz2-1.dll
-│   ├── libfreetype-6.dll
-│   ├── libgcc_s_seh-1.dll
-│   ├── libogg-0.dll
-│   ├── libpng16-16.dll
-│   ├── libstdc++-6.dll
-│   ├── libvorbis-0.dll
-│   ├── libvorbisenc-2.dll
-│   ├── libvorbisfile-3.dll
-│   ├── libwinpthread-1.dll
-│   ├── sfml-audio-2.dll
-│   ├── sfml-graphics-2.dll
-│   ├── sfml-system-2.dll
-│   ├── sfml-window-2.dll
-│   └── zlib1.dll
+├── build
+│   ├── cli
+│   │   ├── CMakeCache.txt
+│   │   ├── CMakeFiles/
+│   │   ├── Makefile
+│   │   ├── cmake_install.cmake
+│   │   ├── engine
+│   │   │   ├── CMakeFiles/
+│   │   │   ├── Makefile
+│   │   │   ├── cmake_install.cmake
+│   │   │   └── libtetris_engine.a
+│   │   └── tetris_cli
+│   └── gui
+│       ├── CMakeCache.txt
+│       ├── CMakeFiles/
+│       ├── Makefile
+│       ├── cmake_install.cmake
+│       ├── compile_commands.json
+│       ├── engine
+│       │   ├── CMakeFiles
+│       │   │   ├── CMakeDirectoryInformation.cmake
+│       │   │   ├── progress.marks
+│       │   │   └── tetris_engine.dir
+│       │   ├── Makefile
+│       │   ├── cmake_install.cmake
+│       │   └── libtetris_engine.a
+│       ├── tetris_gui
+│       └── ui
+│           ├── CMakeFiles/
+│           ├── Makefile
+│           ├── cmake_install.cmake
+│           └── libtetris_ui.a
+├── engine
+│   ├── CMakeLists.txt
+│   ├── include
+│   │   └── tetris
+│   │       ├── Bag.hpp
+│   │       ├── Board.hpp
+│   │       ├── EngineConfig.hpp
+│   │       ├── Game.hpp
+│   │       ├── Tetromino.hpp
+│   │       └── Types.hpp
+│   └── src
+│       ├── Bag.cpp
+│       ├── Board.cpp
+│       ├── Game.cpp
+│       └── Tetromino.cpp
 ├── include
 │   └── tetris
-│       ├── App.hpp
-│       ├── Bag.hpp
-│       ├── Board.hpp
-│       ├── Colors.hpp
-│       ├── Config.hpp
-│       ├── Game.hpp
-│       ├── Hud.hpp
-│       ├── Renderer.hpp
-│       ├── Tetromino.hpp
-│       └── Types.hpp
-└── src
-    ├── App.cpp
-    ├── Bag.cpp
-    ├── Board.cpp
-    ├── Colors.cpp
-    ├── Config.cpp
-    ├── Game.cpp
-    ├── Hud.cpp
-    ├── Renderer.cpp
-    └── Tetromino.cpp
+├── src
+└── ui
+    ├── CMakeLists.txt
+    ├── include
+    │   └── tetris
+    │       ├── App.hpp
+    │       ├── Colors.hpp
+    │       ├── Config.hpp
+    │       ├── Hud.hpp
+    │       └── Renderer.hpp
+    └── src
+        ├── App.cpp
+        ├── Colors.cpp
+        ├── Config.cpp
+        ├── Hud.cpp
+        └── Renderer.cpp
 ```
 
 ## Compilação
