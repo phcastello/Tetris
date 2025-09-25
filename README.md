@@ -1,4 +1,4 @@
-# Tetris OO
+# Tetris
 
 Implementação em C++17 do clássico Tetris utilizando [SFML](https://www.sfml-dev.org/). O projeto foi refatorado para uma arquitetura modular, cobrindo menu, jogo completo em tela cheia e telas de fim de jogo, além de funcionalidades modernas como *ghost piece*, *hold*, *hard drop* e pré-visualização de peças.
 
@@ -28,17 +28,60 @@ Implementação em C++17 do clássico Tetris utilizando [SFML](https://www.sfml-
 
 ## Estrutura do projeto
 ```
-assets/
-  HennyPenny.ttf
-  TetrisGameMusic.ogg
-include/tetris/
-  App.hpp, Bag.hpp, Board.hpp, Colors.hpp, Config.hpp,
-  Game.hpp, Hud.hpp, Renderer.hpp, Tetromino.hpp, Types.hpp
-src/
-  App.cpp, Bag.cpp, Board.cpp, Colors.cpp, Config.cpp,
-  Game.cpp, Hud.cpp, Renderer.cpp, Tetromino.cpp
-Tetris.cpp
-README.md
+├── LICENSE
+├── README.md
+├── Tetris.cpp
+├── assets
+│   ├── HennyPenny.ttf
+│   └── TetrisGameMusic.ogg
+├── bin
+│   ├── HennyPenny.ttf
+│   ├── OpenAL32.dll
+│   ├── Tetris.exe
+│   ├── TetrisGameMusic.ogg
+│   ├── Tetris_LINUX
+│   ├── Tetris_WINDOWS.exe
+│   ├── assets
+│   │   ├── HennyPenny.ttf
+│   │   └── TetrisGameMusic.ogg
+│   ├── libFLAC-12.dll
+│   ├── libbz2-1.dll
+│   ├── libfreetype-6.dll
+│   ├── libgcc_s_seh-1.dll
+│   ├── libogg-0.dll
+│   ├── libpng16-16.dll
+│   ├── libstdc++-6.dll
+│   ├── libvorbis-0.dll
+│   ├── libvorbisenc-2.dll
+│   ├── libvorbisfile-3.dll
+│   ├── libwinpthread-1.dll
+│   ├── sfml-audio-2.dll
+│   ├── sfml-graphics-2.dll
+│   ├── sfml-system-2.dll
+│   ├── sfml-window-2.dll
+│   └── zlib1.dll
+├── include
+│   └── tetris
+│       ├── App.hpp
+│       ├── Bag.hpp
+│       ├── Board.hpp
+│       ├── Colors.hpp
+│       ├── Config.hpp
+│       ├── Game.hpp
+│       ├── Hud.hpp
+│       ├── Renderer.hpp
+│       ├── Tetromino.hpp
+│       └── Types.hpp
+└── src
+    ├── App.cpp
+    ├── Bag.cpp
+    ├── Board.cpp
+    ├── Colors.cpp
+    ├── Config.cpp
+    ├── Game.cpp
+    ├── Hud.cpp
+    ├── Renderer.cpp
+    └── Tetromino.cpp
 ```
 
 ## Compilação
