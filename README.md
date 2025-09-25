@@ -1,111 +1,92 @@
 # Tetris
 
-Implementação em C++17 do clássico Tetris utilizando [SFML](https://www.sfml-dev.org/). O projeto foi refatorado para uma arquitetura modular, cobrindo menu, jogo completo em tela cheia e telas de fim de jogo, além de funcionalidades modernas como *ghost piece*, *hold*, *hard drop* e pré-visualização de peças.
+Implementação modular do Tetris em C++20. O projeto é organizado em um motor de jogo reutilizável e camadas de apresentação que consomem esse motor (aplicações GUI e CLI). A versão gráfica usa SFML para oferecer uma partida completa em tela cheia, enquanto o executável de linha de comando hoje funciona como stub para integrações futuras.
 
-## Recursos principais
-- **Loop completo de jogo** com menu inicial, partida, desligamento por ESC e tela de *game over* com opção de reiniciar.
-- **Sistema de peças 7-bag ajustado** para evitar repeticoes consecutivas e garantir variedade.
-- **Fila de proximas peças** com visual alinhado a nova arquitetura e máscaras 4x4 pré-computadas.
-- **Hold de peça** com bloqueio por turno e preview dedicado.
-- **Ghost e hard drop** para jogabilidade ágil.
-- **Pontuação clássica** (100/300/500/800) e exibição em tempo real.
-- **Música e fontes** já integradas (assets na pasta `assets/`).
+## Visão geral da arquitetura
+- `tetris_engine`: biblioteca estática com as regras do jogo.
+- `tetris_ui`: biblioteca SFML responsável por renderizar o jogo, HUD, música, layout adaptável ao monitor e tratamento de inputs contínuos.
+- `tetris_gui`: executável principal. Instancia a UI, exibe menu inicial, controla o loop de partida e apresenta a tela de game over.
+- `tetris_cli`: executável leve que linka apenas o motor. Exibe uma mensagem placeholder e serve como ponto de partida para coisas que não tem relação com a SFML.
 
-## Controles
+## Estrutura do repositório
+```
+├── CMakeLists.txt
+├── apps/
+│   ├── tetris_cli.cpp
+│   └── tetris_gui.cpp
+├── assets/
+│   ├── HennyPenny.ttf
+│   └── TetrisGameMusic.ogg
+├── engine/
+│   ├── CMakeLists.txt
+│   ├── include/tetris/
+│   └── src/
+└── ui/
+    ├── CMakeLists.txt
+    ├── include/tetris/
+    └── src/
+```
+
+## Funcionalidades principais
+- Loop completo com menu inicial, gameplay contínuo, pausa por ESC e tela de game over com opção de reinício.
+- Sistema de peças 7-bag com histórico para reduzir repetições consecutivas.
+- Pré-visualização de próximas peças (4 slots) e suporte a hold com bloqueio por turno.
+- Ghost piece, hard drop, soft drop acelerado e detecção de entradas contínuas esquerda/direita.
+- Placar clássico (100/300/500/800 pontos) exibido em tempo real.
+- Layout em tela cheia, HUD informativo e trilha sonora/música ambiente em loop.
+
+## Controles (GUI)
 | Tecla            | Ação                         |
 |------------------|------------------------------|
 | `Enter`          | Iniciar partida (menu)       |
 | `ESC`            | Sair / fechar janela         |
-| `←` / `→`        | Mover peca                   |
+| `←` / `→`        | Mover peça                   |
 | `↓`              | *Soft drop*                  |
-| `↑`              | Girar peca (sentido horario) |
+| `↑`              | Girar peça (sentido horário) |
 | `Espaço`         | *Hard drop*                  |
 | `C`              | *Hold* / troca com hold      |
 
 ## Dependências
-- [SFML 2.5+](https://www.sfml-dev.org/) (módulos graphics, window, system, audio).
-- Compilador compatível com C++17 (g++, clang++, MSVC).
-
-## Estrutura do projeto
-```
-├── LICENSE
-├── README.md
-├── Tetris.cpp
-├── assets
-│   ├── HennyPenny.ttf
-│   └── TetrisGameMusic.ogg
-├── bin
-│   ├── HennyPenny.ttf
-│   ├── OpenAL32.dll
-│   ├── Tetris.exe
-│   ├── TetrisGameMusic.ogg
-│   ├── Tetris_LINUX
-│   ├── Tetris_WINDOWS.exe
-│   ├── assets
-│   │   ├── HennyPenny.ttf
-│   │   └── TetrisGameMusic.ogg
-│   ├── libFLAC-12.dll
-│   ├── libbz2-1.dll
-│   ├── libfreetype-6.dll
-│   ├── libgcc_s_seh-1.dll
-│   ├── libogg-0.dll
-│   ├── libpng16-16.dll
-│   ├── libstdc++-6.dll
-│   ├── libvorbis-0.dll
-│   ├── libvorbisenc-2.dll
-│   ├── libvorbisfile-3.dll
-│   ├── libwinpthread-1.dll
-│   ├── sfml-audio-2.dll
-│   ├── sfml-graphics-2.dll
-│   ├── sfml-system-2.dll
-│   ├── sfml-window-2.dll
-│   └── zlib1.dll
-├── include
-│   └── tetris
-│       ├── App.hpp
-│       ├── Bag.hpp
-│       ├── Board.hpp
-│       ├── Colors.hpp
-│       ├── Config.hpp
-│       ├── Game.hpp
-│       ├── Hud.hpp
-│       ├── Renderer.hpp
-│       ├── Tetromino.hpp
-│       └── Types.hpp
-└── src
-    ├── App.cpp
-    ├── Bag.cpp
-    ├── Board.cpp
-    ├── Colors.cpp
-    ├── Config.cpp
-    ├── Game.cpp
-    ├── Hud.cpp
-    ├── Renderer.cpp
-    └── Tetromino.cpp
-```
+- CMake 3.20 ou superior.
+- Compilador com suporte a C++20 (g++, clang++, MSVC).
+- [SFML 2.6+](https://www.sfml-dev.org/) com módulos `graphics`, `window`, `system` e `audio` (necessário apenas quando `BUILD_GUI=ON`).
 
 ## Compilação
+Recomenda-se um build fora da árvore.
+
 ### Linux / macOS
 ```bash
-g++ -std=c++17 Tetris.cpp src/*.cpp -Iinclude \
-    $(pkg-config --cflags --libs sfml-graphics sfml-window sfml-system sfml-audio) \
-    -o tetris
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
 ```
+Certifique-se de que a SFML esteja instalada no sistema. Em distribuições Debian/Ubuntu, por exemplo: `sudo apt install libsfml-dev`.
 
-### Windows (MinGW)
-```bash
-g++ -std=c++17 Tetris.cpp src/*.cpp -Iinclude \
-    -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o tetris.exe
-```
-Para compilar, é necessário que o SFML esteja instalado e configurado corretamente no sistema.
-Certifique-se de que as DLLs/SO do SFML estejam acessíveis na execução.
+### Windows (MSVC ou MinGW)
+1. Instale a SFML 2.5+ e configure a variável `SFML_DIR` apontando para o pacote CMake da biblioteca.
+2. Gere o build:
+   ```bash
+   cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+   cmake --build build
+   ```
 
+### Opções úteis
+- `-DBUILD_GUI=OFF` desabilita a camada SFML quando você quer apenas o motor ou o CLI.
+- `-DBUILD_CLI=OFF` evita gerar o stub em linha de comando.
 
 ## Execução
+Após a compilação, os binários ficam no diretório de build (por padrão, `build/`). Execute a GUI a partir da raiz do projeto para que os assets sejam encontrados:
 ```bash
-./tetris
+./build/tetris_gui
 ```
-A aplicacao abre em tela cheia. Utilize `ESC` para encerrar a qualquer momento.
+O CLI atual imprime apenas `tetris_cli stub`:
+```bash
+./build/tetris_cli
+```
+
+> Observação: mantenha a pasta `assets/` acessível no diretório de trabalho do executável ou ajuste `tetris::config::fontPath` e `musicPath` se mover os arquivos.
 
 ## Créditos
 Criadores: Pedro Hasson Castello, Ruan Pablo Martins, Patrick Correa.
+
+## Licença
+Este projeto está licenciado sob os termos descritos em `LICENSE`.
